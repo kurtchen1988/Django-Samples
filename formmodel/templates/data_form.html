@@ -1,0 +1,21 @@
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Title</title>
+	</head>
+	<body>
+		{% if product.errors %}
+		<p>
+			数据出错了，错误信息：{{ product.errors }}。
+		</p>
+		{% else %}
+		<form action="" method="POST">
+			{% csrf_token %}
+			<table>
+				{{ product.as_table }}
+			</table>
+			<input type="submit" value="提交">
+		</form>
+		{% endif %}
+	</body>
+</html>
