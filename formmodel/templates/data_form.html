@@ -13,7 +13,18 @@
 			{% csrf_token %}
 			<table>
 				{{ product.as_table }}
+				<!-- 
+				# 将表单生成HTML的ul标签
+				{{ product.as_ul }}
+				# 将表单生成HTML的p标签
+				{{ product.as_p }}
+				# 生成单个HTML元素控件
+				{{ product.type }}
+				# 将表单生成HTML的label标签
+				{{ product.type.label }}
+				-->
 			</table>
+				
 			<input type="submit" value="提交">
 		</form>
 		{% endif %}

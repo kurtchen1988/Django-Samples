@@ -19,5 +19,8 @@ from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',views.index)
+    # 首页的URL
+    path('',views.index),
+    # 数据库表单
+    path('<int:id>.html', views.model_index),
 ]
