@@ -57,6 +57,19 @@ def methodpara(request):
 			name = 'Everyone'
 		return HttpResponse('this is a get method')
 
+def filterFunc(request):
+	context = {}
+	context['title'] ='test'
+	context['okok'] ='ok'
+	context['manman'] = 'men'
+	context['woman'] = 'women'
+	context['name_list'] = ['sd','sdf','wer','rtb']
+	context['ok_list'] = {'ds':'sdf'}
+	return render(request,'filter.html',context=context)
+
+def inherite(request):
+	return render(request, 'inherite.html')
+
 from django.views.generic import ListView
 
 class ProductList(ListView):
@@ -78,3 +91,4 @@ class ProductList(ListView):
 		print(self.request.method)
 		type_list = Product.objects.values('type').distinct()
 		return type_list
+

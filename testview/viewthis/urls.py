@@ -1,5 +1,5 @@
 from django.urls import path, re_path
-from .views import normURL, reURL, paraName, manyPara, download, renderpra, redione, reditwo, viewpara, methodpara, ProductList
+from .views import normURL, reURL, paraName, manyPara, download, renderpra, redione, reditwo, viewpara, methodpara, ProductList, filterFunc, inherite
 
 urlpatterns = [ path('<int:year>/<month>/<slug:day>', normURL),
 				re_path('(?P<one>[0-9]{4})/(?P<two>[0-9]{2})/', reURL),
@@ -13,4 +13,6 @@ urlpatterns = [ path('<int:year>/<month>/<slug:day>', normURL),
 				path('methodpara', methodpara),
 				path('commonview', ProductList.as_view(), {'id':1, 'name':'phone'}),
 				path('commonview/<id>.html', ProductList.as_view(),{'name':'phone'}),
+				path('filter', filterFunc, name='filterFunc'),
+				path('inherite', inherite)
 				]
