@@ -1,0 +1,43 @@
+{% load myfilter %}
+<html>
+	<header><title>{{title|myreplace}}</title></header>
+	<body>
+		<p>{{ okok.a }}</p>
+		{% for man in manman %}
+			<p>{{ man }}</p>
+		{% endfor %}
+
+		{% if woman %}
+		<p>woman shown</p>
+		{% else %}
+		<p>Default</p>
+		{% endif %}
+
+		<form action="">
+			{% csrf_token %}
+		</form>
+
+		<a href="{% url 'filterFunc' %}">click</a>
+		{% with manm=man %}
+		<p>{{manm}}</p>
+		{% endwith %}
+
+		{% load staticfiles%}
+
+		{% for name in name_list %}
+		{% for ok in ok_list %}
+		<p>{{ forloop.parentloop }}</p>
+		{% endfor %}
+
+		{% if forloop.counter == 1 %}
+		<span>first loop</span>
+		{% elif forloop.revcounter == 2 %}
+		<p>倒数第二个循环</p>
+		{% elif forloop.last %}
+		<p>这是最后一次循环</p>
+		{% else %}
+		<p>本次循环次数为{{forloop.counter0}}</p>
+		{% endif %}
+		{% endfor %}
+	</body>
+</html>
