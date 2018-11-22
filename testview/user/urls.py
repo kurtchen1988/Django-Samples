@@ -8,5 +8,5 @@ urlpatterns = [
 	path('login.html', views.logoutView, name='logout'),
 	path('', views.index),
 	path('findPassword.html', views.findPassword, name='findPassword'),
-	path('findPasswordVeri.html', views.findPasswordVeri, name='findPasswordVeri')
+	#path('findPasswordVeri.html', views.findPasswordVeri, name='findPasswordVeri')
 ]

@@ -84,5 +84,34 @@ def logoutView(request):
 	logout(request)
 	return redirect('/user')
 
-def findPasswordVeri(request):
-	pass
+def findPassword(request):
+	button = '获取验证码'
+	new_password = False
+	if request.method == 'POST':
+		username = request.POST.get('username','root')
+		VerificationCode = request.POST.get('VerificationCode','')
+		password = request.POST.get('password','')
+		user = User.objects.filter(username=username)
+
+		if not user:
+			tips = '用户' + username + '不存在'
+		else:
+			if not request.session.get('VerificationCode',''):
+				button = '重置密码'
+				tips = '验证码已发送'
+				new_password = True
+				VerificationCode = str(random.randint(1000,9999))
+				request.session['VerificationCode'] = VerificationCode
+				print(VerificationCode)
+				#user[0].email_user('找回密码',VerificationCode)
+			elif VerificationCode == request.session.get('VerificationCode'):
+				dj_ps = make_password(password, None, 'pbkdf2_sha256')
+				user[0].password = dj_ps
+				user[0].save()
+				del request.session['VerificationCode']
+				tips = '密码已重置'
+			else:
+				tips = '验证码错误，请重新获取'
+				new_password = False
+				del request.session['VerificationCode']
+	return render(request,'userPara.html',locals())
