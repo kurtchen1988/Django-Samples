@@ -9,7 +9,11 @@
 		<ul class="rt">
 			{% if username %}
 				<li>用户名：{{ username }}</li>
-				<li><a href="{% %}"></a></li>
+				<li><a href="{% url 'logout' %}">退出登陆</a></li>
+			{% else %}
+				<li><a href="{% url 'login' %}">登陆</a></li>
+				<li><a href="{% url 'login' %}">注册</a></li>
+			{% endif %}
 		</ul>
 	</div>
 </head>
