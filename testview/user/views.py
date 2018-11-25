@@ -2,7 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.decorators import login_required, permission_required
+from .form import MyUserCreationForm
 import random
+from .models import MyUser
 # Create your views here.
 def loginView(request):
 	title = '登陆'
@@ -29,6 +32,16 @@ def index(request):
 	username = request.user.username
 	return render(request,'index.html',locals())
 
+@login_required(login_url='/user/loginPerm')
+@permission_required(perm='indexPerm.visit_Product', login_url='/user/loginPerm')
+
+def indexPerm(request):
+	user = request.user
+	if user.has_perm('indexPerm.visit_Product'):
+		return render(request, 'indexPerm.html', locals())
+	else:
+		return redirect('login.html')
+
 def registerView(request):
 	title = '注册'
 	unit_2 = '/user/login.html'
@@ -45,6 +58,17 @@ def registerView(request):
 			user.save()
 			tips = '注册成功，请登陆'
 	return render(request, 'user.html', locals())
+
+def registerFormView(request):
+	if request.method == 'POST':
+		user = MyUserCreationForm(request.POST)
+		if user.is_valid():
+			user.save()
+			tips = '注册成功'
+			user = MyUserCreationForm()
+	else:
+		user = MyUserCreationForm()
+	return render(request, 'userForm.html', locals())
 
 def setpasswordView(request):
 	title = '修改密码'
@@ -115,3 +139,40 @@ def findPassword(request):
 				new_password = False
 				del request.session['VerificationCode']
 	return render(request,'userPara.html',locals())
+
+def loginPerm(request):
+	tips = '请登录'
+	title = '用户登录'
+	if request.method == 'POST':
+		username = request.POST.get('username','')
+		password = request.POST.get('password','')
+		if MyUser.objects.filter(username=username):
+			user = authenticate(username=username, password=password)
+			if user:
+				if user.is_active:
+					login(request, user)
+				return redirect('/user/indexPerm')
+			else:
+				tips = '账号密码错误，请重新输入'
+		else:
+			tips = '用户不存在，请注册'
+	return render(request, 'userPerm.html', locals())
+
+def registerPerm(request):
+	title = '用户注册'
+	if request.method == 'POST':
+		username = request.POST.get('username','')
+		password = request.POST.get('password','')
+		if MyUser.objects.filter(username=username):
+			tips = '用户已存在'
+		else:
+			user = MyUser.objects.create_user(username=username, password=password)
+			user.save()
+			permission = Permission.objects.filter(codename='visit_Product')[0]
+			user.user_permissions.add(permission)
+			return redirect('/user/login.html')
+	return render(request, 'userPerm.html', locals())
+
+def logoutPerm(request):
+	logout(request)
+	return redirect('/user/indexPerm')

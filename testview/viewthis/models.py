@@ -22,6 +22,7 @@ class Product(models.Model):
 	class Meta:
 		verbose_name = '产品信息'
 		verbose_name_plural = '产品信息'
+		permissions = (('visit_product','Can visit Product'),)
 
 	def get_readonly_fields(self, request, obj=None):
 		if request.user.is_superuser:
