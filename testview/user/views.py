@@ -34,7 +34,6 @@ def index(request):
 
 @login_required(login_url='/user/loginPerm')
 @permission_required(perm='indexPerm.visit_Product', login_url='/user/loginPerm')
-
 def indexPerm(request):
 	user = request.user
 	if user.has_perm('indexPerm.visit_Product'):

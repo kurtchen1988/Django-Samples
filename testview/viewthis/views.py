@@ -3,6 +3,8 @@ from django.http import HttpResponse
 import csv
 from .models import Product
 from django.views.generic import ListView
+from django.views.decorators.cache import cache_page
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 def normURL(request, year, month, day):
 	return HttpResponse('Hello world | '+str(year)+' | '+str(month)+' | '+str(day))
@@ -69,6 +71,12 @@ def filterFunc(request):
 
 def inherite(request):
 	return render(request, 'inherite.html')
+
+@cache_page(timeout=10, cache='MyDjango', key_prefix='MyDjangoView')
+@login_required(login_url='/user/login')
+def ShoppingCarView(request):
+	pass
+	return render(request, '', locals())
 
 from django.views.generic import ListView
 
